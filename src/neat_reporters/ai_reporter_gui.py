@@ -455,7 +455,6 @@ class PygameReporter(BaseReporter):
                 ui_manager.update(time_delta)
                 ui_manager.draw_ui(window_surface)
                 pygame.display.update()
-                snake_length = len(snake_data)
             else:
                 loading_tick += 1
                 # blit loading animation on screen
