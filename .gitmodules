@@ -1,0 +1,3 @@
+[submodule "lib/fast_snake"]
+	path = lib/fast_snake
+	url = https://github.com/Apoorva64/fast-snake-python-numba
