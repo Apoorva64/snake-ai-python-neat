@@ -22,7 +22,7 @@
 <br />
 <div align="center">
   <a href="data/readme-data/logo.PNG">
-    <img src="" alt="Logo" height="80">
+    <img src="" alt="Logo" height="200">
   </a>
 
 <h3 align="center">Snake ai</h3>
