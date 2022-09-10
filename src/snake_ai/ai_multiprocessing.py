@@ -4,7 +4,7 @@ import neat
 import numpy as np
 import pygame
 import neat_reporters.visu as visualize
-from fast_snake.src.fast_snake.fast_snake import generate_game, move_snake
+from fast_snake.fast_snake import generate_game, move_snake
 from neat_reporters import ai_reporter, ai_reporter_gui
 from snake_ai.inputs import get_inputs
 
@@ -96,6 +96,7 @@ def eval_genome(genome, config):
 
 
 def run(config_file):
+    global ENABLE_GUI
     # Load configuration.
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -114,6 +115,7 @@ def run(config_file):
     else:
         # Create the population, which is the top-level object for a NEAT run.
         p = neat.Population(config)
+        ENABLE_GUI = False
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(neat.StdOutReporter(True))

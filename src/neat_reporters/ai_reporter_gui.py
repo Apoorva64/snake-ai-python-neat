@@ -12,7 +12,7 @@ import time
 from neat.math_util import mean, stdev
 from neat.six_util import itervalues
 
-from fast_snake.src.fast_snake.fast_snake import generate_game, move_snake, render
+from fast_snake.fast_snake import generate_game, move_snake, render
 from neat_reporters.visu import draw_net
 from snake_ai.inputs import draw_ai_inputs, get_inputs
 from neat_reporters import visu as visualize

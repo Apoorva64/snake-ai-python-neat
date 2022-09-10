@@ -5,7 +5,7 @@ import numpy as np
 import pygame
 from numba import njit
 
-from fast_snake.src.fast_snake.fast_snake import TileTypes
+from fast_snake.fast_snake import TileTypes
 
 
 @njit

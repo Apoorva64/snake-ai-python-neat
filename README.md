@@ -30,6 +30,7 @@
   <p align="center">
     This the snake game with ai that can play the game at a reasonable level
   </p>
+    <a href="https://www.twitch.tv/apoorva64">View Demo</a>
 </div>
 
 
@@ -51,108 +52,154 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+    <li><a href="#how-does-it-work">How does it work</a></li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `Apoorva64`, `snake-ai-python-neat`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `snake ai`, `project_description`
-
+The project is a snake game with ai that can play the game at a reasonable level.
+It is built with pygame and neat-python.
+The logic for the game is a fast implementation of the snake game with numba which can be
+found [here](https://github.com/Apoorva64/fast-snake-python-numba).
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* [Pygame](https://www.pygame.org/news)
+* [Numba](https://numba.pydata.org/)
+* [Neat-python](https://neat-python.readthedocs.io/en/latest/)
+* [Numpy](https://numpy.org/)
+* [Pandas](https://pandas.pydata.org/)
+* [Jupyter](https://jupyter.org/)
+* [Graphviz](https://graphviz.org/)
+* [Matplotlib](https://matplotlib.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## How does it work
 
+### Ai inputs
+
+The ai gets 8 inputs from the game.
+The inputs are the distance from the snake to the 4 walls, the distance as well the angle to the food and 4 rays.
+
+### Ai Outputs
+
+The inputs are then fed to the neural network.
+The output of the neural network is the direction the snake should move in.
+The direction is chosen by taking the direction with the highest output value.
+
+### Fitness function
+
+The fitness function is the score of the snake.
+It is calculated using the following rules:
+
+* +1 if the snake gets closer to the food
+* -1 if the snake gets further from the food
+* +100 if the snake eats the food
+* +0.1 for every frame the snake is alive
+* stop the game if the snake dies
+
+### Training
+
+The neural network is trained using the neat algorithm.
+The neat algorithm is a genetic algorithm that evolves the neural network to play the game.
+The neat algorithm is implemented in the neat-python library.
+The neat algorithm is explained in
+the [neat-python documentation](https://neat-python.readthedocs.io/en/latest/neat_overview.html).
+
+### Visualization
+
+The visualization of the neural network is done using graphviz (click on the "Graph" button in the top right corner of
+the visualization window).
+The visualization of the training is done using matplotlib (click on the "Plot" button in the top right corner of the
+visualization window).
+The training is done in the background and the visualization is updated in real time.
+
+#### Additional controls
+
+* Press "p" augment the speed of the game
+* Press "o" reduce the speed of the game
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo and the submodules
    ```sh
-   git clone https://github.com/Apoorva64/snake-ai-python-neat.git
+   git clone --recurse-submodules https://github.com/Apoorva64/snake-ai-python-neat.git
    ```
-3. Install NPM packages
+2. Install the requirements
    ```sh
-   npm install
+    pip install -r requirements.txt
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Add the lib/fast_snake/src, src, data folder to the python path
+    ```bat
+    set PYTHONPATH=%PYTHONPATH%;lib/fast_snake/src;src;data
+    ```
+4. Run the game
+    ```sh
+    python src/snake_ai/ai_multiprocessing.py
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+You can change settings in the ai_multiprocessing.py file.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+```python
+RUNS_PER_GAME_SIZE = 10
+ENABLE_GUI = True
+# GAME_SIZE_RANGE = range(5, 100, 10)
+GAME_SIZE_RANGE = [40]
+SNAKE_GAME_SIZE = (40, 40)
+FOOD_TIMER_MAX = SNAKE_GAME_SIZE[0] * np.sqrt(2)
+NUMBER_OF_RAYS = 4
+ROTATING_DIRECTIONS = False
+INCLUDE_LAST_DIRECTION = False
+INCLUDE_SNAKE_LENGTH = False
+INCLUDE_WALL_DISTANCE = True
+TEMPORAL_LENGTH = 1
+CORE_COUNT = multiprocessing.cpu_count() - 1
+```
+
+Be careful when changing settings the game will not be able to do visulization on the first run. You must stop the game
+and relauch it to get them.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/Apoorva64/snake-ai-python-neat/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any
+contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also
+simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
@@ -166,15 +213,17 @@ Don't forget to give the project a star! Thanks again!
 
 
 <!-- LICENSE -->
+
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- CONTACT -->
+
 ## Contact
 
 Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
@@ -185,45 +234,31 @@ Project Link: [https://github.com/Apoorva64/snake-ai-python-neat](https://github
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/Apoorva64/snake-ai-python-neat.svg?style=for-the-badge
+
 [contributors-url]: https://github.com/Apoorva64/snake-ai-python-neat/graphs/contributors
+
 [forks-shield]: https://img.shields.io/github/forks/Apoorva64/snake-ai-python-neat.svg?style=for-the-badge
+
 [forks-url]: https://github.com/Apoorva64/snake-ai-python-neat/network/members
+
 [stars-shield]: https://img.shields.io/github/stars/Apoorva64/snake-ai-python-neat.svg?style=for-the-badge
+
 [stars-url]: https://github.com/Apoorva64/snake-ai-python-neat/stargazers
+
 [issues-shield]: https://img.shields.io/github/issues/Apoorva64/snake-ai-python-neat.svg?style=for-the-badge
+
 [issues-url]: https://github.com/Apoorva64/snake-ai-python-neat/issues
+
 [license-shield]: https://img.shields.io/github/license/Apoorva64/snake-ai-python-neat.svg?style=for-the-badge
+
 [license-url]: https://github.com/Apoorva64/snake-ai-python-neat/blob/master/LICENSE.txt
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+
