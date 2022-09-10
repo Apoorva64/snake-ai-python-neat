@@ -21,8 +21,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Apoorva64/snake-ai-python-neat">
-    <img src="https://nynashamnmedia.se/projekt8/2.jfif" alt="Logo" height="80">
+  <a href="data/readme-data/logo.PNG">
+    <img src="" alt="Logo" height="80">
   </a>
 
 <h3 align="center">Snake ai</h3>
