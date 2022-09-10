@@ -226,7 +226,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Appadoo Apoorva Srinivas - [Linkedin](https://www.linkedin.com/in/appadoo-apoorva-srinivas-481367207/) - apoorvaappadoo@gmail.com
 
 Project Link: [https://github.com/Apoorva64/snake-ai-python-neat](https://github.com/Apoorva64/snake-ai-python-neat)
 
