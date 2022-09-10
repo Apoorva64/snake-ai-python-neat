@@ -21,8 +21,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Apoorva64/snake-ai-python-neat/blob/master/data/readme-data/logo.png?raw=true">
-    <img src="" alt="Logo" height="200">
+  <a href="https://github.com/Apoorva64/snake-ai-python-neat">
+    <img src="data/readme-data/logo.PNG" alt="Logo" height="200">
   </a>
 
 <h3 align="center">Snake ai</h3>
