@@ -28,7 +28,7 @@
 <h3 align="center">Snake ai</h3>
 
   <p align="center">
-    This the snake game ai that can play the game at a reasonable level
+    This a snake ai that can play the game at a reasonable level
   </p>
     <a href="https://www.twitch.tv/apoorva64">View Demo</a>
 </div>
