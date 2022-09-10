@@ -21,7 +21,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="data/readme-data/logo.PNG">
+  <a href="data/readme-data/logo.png">
     <img src="" alt="Logo" height="200">
   </a>
 
