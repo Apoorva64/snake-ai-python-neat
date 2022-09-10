@@ -28,7 +28,7 @@
 <h3 align="center">Snake ai</h3>
 
   <p align="center">
-    This the snake game with ai that can play the game at a reasonable level
+    This the snake game ai that can play the game at a reasonable level
   </p>
     <a href="https://www.twitch.tv/apoorva64">View Demo</a>
 </div>
@@ -66,7 +66,7 @@
 
 ## About The Project
 
-The project is a snake game with ai that can play the game at a reasonable level.
+The project is a snake game with an ai that can play the game at a reasonable level.
 It is built with pygame and neat-python.
 The logic for the game is a fast implementation of the snake game with numba which can be
 found [here](https://github.com/Apoorva64/fast-snake-python-numba).
