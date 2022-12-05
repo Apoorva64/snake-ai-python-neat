@@ -10,7 +10,7 @@ from snake_ai.inputs import get_inputs
 
 RUNS_PER_GAME_SIZE = 10
 ENABLE_GUI = True
-# GAME_SIZE_RANGE = range(5, 100, 10)
+# GAME_SIZE_RANGE = range(5, 65, 10)
 GAME_SIZE_RANGE = [40]
 SNAKE_GAME_SIZE = (40, 40)
 DIRECTIONS = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -20,16 +20,17 @@ OPPOSITE_DIRECTIONS = {
     (1, 0): (-1, 0),
     (-1, 0): (1, 0)
 }
-FOOD_TIMER_MAX = SNAKE_GAME_SIZE[0] * np.sqrt(2)
-NUMBER_OF_RAYS = 4
+FOOD_TIMER_MAX = SNAKE_GAME_SIZE[0] * np.sqrt(2)/2
+NUMBER_OF_RAYS = 8
 ROTATING_DIRECTIONS = False
 INCLUDE_LAST_DIRECTION = False
 INCLUDE_SNAKE_LENGTH = False
 INCLUDE_WALL_DISTANCE = True
+NORMALIZED_INPUTS = True
 TEMPORAL_LENGTH = 1
-CORE_COUNT = multiprocessing.cpu_count() - 1
+CORE_COUNT = multiprocessing.cpu_count()
 CHECKPOINT_FOLDER = \
-    f'checkpoints-ai-multiprocessing-{NUMBER_OF_RAYS}-rays-{ROTATING_DIRECTIONS}-rotating-directions-0-hidden-fixed-game-size-40-{INCLUDE_SNAKE_LENGTH}-snake-length-{INCLUDE_WALL_DISTANCE}-wall-distance-{INCLUDE_LAST_DIRECTION}-last-direction-{TEMPORAL_LENGTH}-temporal-length-2'
+    f'checkpoints-ai-multiprocessing-{NUMBER_OF_RAYS}-rays-{ROTATING_DIRECTIONS}-rotating-directions-0-hidden-fixed-game-size-40-{INCLUDE_SNAKE_LENGTH}-snake-length-{INCLUDE_WALL_DISTANCE}-wall-distance-{INCLUDE_LAST_DIRECTION}-last-direction-{TEMPORAL_LENGTH}-temporal-{NORMALIZED_INPUTS}-normalized-1'
 
 
 # CHECKPOINT_FOLDER = f"checkpoints-ai-multiprocessing-game-array"
@@ -48,13 +49,14 @@ def eval_genome(genome, config):
             game = generate_game(game_size=(game_size, game_size))
             temporal_inputs = []
             for _ in range(TEMPORAL_LENGTH):
-                temporal_inputs.append(get_inputs(game, n_directions=NUMBER_OF_RAYS,
-                                                  include_snake_length=INCLUDE_SNAKE_LENGTH,
-                                                  include_wall_distance=INCLUDE_WALL_DISTANCE))
+                temporal_inputs.append(
+                    get_inputs(game, n_directions=NUMBER_OF_RAYS, include_wall_distance=INCLUDE_WALL_DISTANCE,
+                               include_snake_length=INCLUDE_SNAKE_LENGTH, normalized=NORMALIZED_INPUTS))
             while not is_dead:
                 inputs = get_inputs(game, n_directions=NUMBER_OF_RAYS,
                                     include_snake_length=INCLUDE_SNAKE_LENGTH,
-                                    include_wall_distance=INCLUDE_WALL_DISTANCE)
+                                    include_wall_distance=INCLUDE_WALL_DISTANCE,
+                                    normalized=NORMALIZED_INPUTS)
 
                 if INCLUDE_LAST_DIRECTION:
                     inputs += list(last_direction)
@@ -122,7 +124,7 @@ def run(config_file):
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
     # p.add_reporter(ai_reporter.GraphsReporter(stats, config, "graphs/" + CHECKPOINT_FOLDER, p))
-    p.add_reporter(neat.Checkpointer(100, filename_prefix=f'{CHECKPOINT_FOLDER}/neat-checkpoint-'))
+    p.add_reporter(neat.Checkpointer(1, filename_prefix=f'{CHECKPOINT_FOLDER}/neat-checkpoint-'))
     if ENABLE_GUI:
         p.add_reporter(
             ai_reporter_gui.PygameReporter(config=config, number_of_rays=NUMBER_OF_RAYS, game_size=SNAKE_GAME_SIZE,
@@ -130,7 +132,7 @@ def run(config_file):
                                            , include_snake_length=INCLUDE_SNAKE_LENGTH,
                                            include_wall_distance=INCLUDE_WALL_DISTANCE,
                                            include_last_direction=INCLUDE_LAST_DIRECTION,
-
+                                           normalized_inputs=NORMALIZED_INPUTS,
                                            ))
 
     pe = neat.ParallelEvaluator(CORE_COUNT, eval_genome)
@@ -146,5 +148,5 @@ def run(config_file):
 
 
 if __name__ == '__main__':
-    config_path = "config"
+    config_path = "../../data/config"
     run(config_path)

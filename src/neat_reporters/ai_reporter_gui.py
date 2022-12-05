@@ -49,7 +49,8 @@ Inputs:<br>
 
 class PygameReporter(BaseReporter):
     def __init__(self, config, stats, number_of_rays=4, game_size=(40, 40), include_last_direction=False,
-                 include_wall_distance=False, include_snake_length=False, temporal_length=1):
+                 include_wall_distance=False, include_snake_length=False, temporal_length=1,
+                 normalized_inputs=False):
         self.fitness_std = None
         self.fitness_mean = None
         self.fitnesses = None
@@ -70,6 +71,7 @@ class PygameReporter(BaseReporter):
         self.include_wall_distance = include_wall_distance
         self.include_snake_length = include_snake_length
         self.temporal_length = temporal_length
+        self.normalized_inputs = normalized_inputs
 
     def start_generation(self, generation):
         self.generation = generation
@@ -255,9 +257,10 @@ class PygameReporter(BaseReporter):
         fps = intro_video.get(cv2.CAP_PROP_FPS)
         temporal_inputs = []
         for _ in range(self.temporal_length):
-            temporal_inputs.append(get_inputs(game, n_directions=self.number_of_rays,
-                                              include_snake_length=self.include_snake_length,
-                                              include_wall_distance=self.include_wall_distance))
+            temporal_inputs.append(
+                get_inputs(game, n_directions=self.number_of_rays, include_wall_distance=self.include_wall_distance,
+                           include_snake_length=self.include_snake_length,
+                           normalized=self.normalized_inputs))
         while is_running:
             if success:
                 clock.tick(fps)
@@ -275,8 +278,10 @@ class PygameReporter(BaseReporter):
                     continue
             window_surface.fill((0, 0, 0))
             time_delta = clock.tick(self.fps_limit) / 1000.0
-            inputs = get_inputs(game, n_directions=self.number_of_rays, include_wall_distance=self.include_wall_distance
-                                , include_snake_length=self.include_snake_length)
+            inputs = get_inputs(game, n_directions=self.number_of_rays,
+                                include_wall_distance=self.include_wall_distance,
+                                include_snake_length=self.include_snake_length,
+                                normalized=self.normalized_inputs)
             if self.include_last_direction:
                 inputs += list(last_direction)
             temporal_inputs.append(inputs)
@@ -304,7 +309,7 @@ class PygameReporter(BaseReporter):
                 snake_head_pos = pygame.Vector2(snake_data[-1][1], snake_data[-1][0])
                 if draw_inputs:
                     draw_ai_inputs(game_surface, game[0], game[1], snake_head_pos, inputs,
-                                   n_directions=self.number_of_rays)
+                                   n_directions=self.number_of_rays,normalized=self.normalized_inputs)
                 snake_head_pos = pygame.Vector2(snake_data[-1][1], snake_data[-1][0])
                 food_pos = pygame.Vector2(food_pos[1], food_pos[0])
                 snake_head_to_food = food_pos - snake_head_pos
@@ -328,8 +333,9 @@ class PygameReporter(BaseReporter):
                     temporal_inputs = []
                     for _ in range(self.temporal_length):
                         temporal_inputs.append(get_inputs(game, n_directions=self.number_of_rays,
+                                                          include_wall_distance=self.include_wall_distance,
                                                           include_snake_length=self.include_snake_length,
-                                                          include_wall_distance=self.include_wall_distance))
+                                                          normalized=self.normalized_inputs))
                 stats_text_box.set_text(html.format(generation=self.generation,
                                                     best_fitness=self.best_genome.fitness if self.best_genome else 0,
                                                     std_fitness=self.fitness_std,
@@ -347,7 +353,7 @@ class PygameReporter(BaseReporter):
 
                                                     distance_to_wall=inputs[
                                                                      self.number_of_rays:self.number_of_rays + 4],
-                                                    rays=", ".join([str(round(r)) for i, r in
+                                                    rays=", ".join([str(round(r,3)) for i, r in
                                                                     enumerate(inputs[:self.number_of_rays])]),
                                                     mean_time=self.average_time_per_generation,
                                                     game_size=self.game_size,

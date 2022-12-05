@@ -47,7 +47,7 @@ def bresenham(x1, y1, x2, y2):
 
 
 def draw_ai_inputs(game_surface, game_array, food_pos, snake_head_pos, inputs, n_directions=8, start_angle=0,
-                   end_angle=2 * math.pi):
+                   end_angle=2 * math.pi, normalized=False):
     """
     Renders the lines which represent the distance between the snake_data head and the 4 walls
     """
@@ -68,6 +68,8 @@ def draw_ai_inputs(game_surface, game_array, food_pos, snake_head_pos, inputs, n
         # if angles is not None:
         #     angle = angles[index]
         # angle = angles[index]
+        if normalized:
+            distance *= game_array.shape[0] * math.sqrt(2)
         vector = pygame.Vector2(math.cos(angle), math.sin(angle))
         pygame.draw.line(game_surface, (255, 255, 0),
                          (snake_head_pos.x * grid_size + grid_size / 2, snake_head_pos.y * grid_size + grid_size / 2),
@@ -122,11 +124,11 @@ def has_intersection(angle_index, game_array, ray, snake_head_pos, snake_head_to
             break
 
 
-def get_inputs(game, n_directions=8, start_angle=0, end_angle=2 * math.pi,
-               include_wall_distance=False, include_snake_length=False):
+def get_inputs(game, n_directions=8, start_angle=0, end_angle=2 * math.pi, include_wall_distance=False,
+               include_snake_length=False, normalized=False):
     snake = game[2]
     food_pos = game[1]
-    game_array = game[0]
+    game_array: [[int]] = game[0]
     snake_head_pos = pygame.Vector2(snake[-1][1], snake[-1][0])
     food_pos = pygame.Vector2(food_pos[1], food_pos[0])
     snake_head_to_food = food_pos - snake_head_pos
@@ -144,12 +146,20 @@ def get_inputs(game, n_directions=8, start_angle=0, end_angle=2 * math.pi,
             wall_distances[i] = grid_size - snake_head_pos.y
     if not include_wall_distance:
         wall_distances = []
+    body_distances: list = get_body_distance_in_n_directions(snake, game_array, n_directions).tolist()
 
-    inputs = [distance for distance in
-              get_body_distance_in_n_directions(snake, game_array, n_directions)] + \
-             [distance for distance in wall_distances] + \
-             [snake_head_to_food.as_polar()[1]] + \
-             [snake_head_to_food.length()]
+    inputs = body_distances + wall_distances
+    if normalized:
+        for i in range(len(inputs)):
+            inputs[i] = inputs[i] / (game_array.shape[0] * math.sqrt(2))
+
+    if normalized:
+        inputs.append(snake_head_to_food.as_polar()[1] / 180)
+        inputs.append(snake_head_to_food.length() / (game_array.shape[0] * math.sqrt(2)))
+    else:
+        inputs.append(snake_head_to_food.as_polar()[1])
+        inputs.append(snake_head_to_food.length())
     if include_snake_length:
         inputs.append(len(snake))
+
     return inputs
